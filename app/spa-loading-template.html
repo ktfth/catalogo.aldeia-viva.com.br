@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html {{ HTML_ATTRS }}>
+<head {{ HEAD_ATTRS }}>
+  {{ HEAD }}
+  <style>
+    #nuxt-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0b0b0c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      z-index: 9999;
+    }
+
+    .loading-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .loading-dot {
+      width: 12px;
+      height: 12px;
+      background: #d4af37;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .loading-text {
+      font-size: 24px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.025em;
+    }
+
+    .loading-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(212, 175, 55, 0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-top: 24px;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body {{ BODY_ATTRS }}>
+  {{ APP }}
+  <div id="nuxt-loading">
+    <div class="loading-logo">
+      <div class="loading-dot"></div>
+      <div>
+        <div class="loading-text">Catálogo - Aldeia Viva</div>
+        <div class="loading-subtitle">Multi-Tenant</div>
+      </div>
+    </div>
+    <div class="loading-spinner"></div>
+  </div>
+</body>
+</html>

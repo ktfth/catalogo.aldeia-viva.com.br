@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm db:reset:*)",
+      "Bash(pnpm dev)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(psql:*)",
+      "Bash(supabase db exec:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

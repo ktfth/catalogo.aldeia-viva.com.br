@@ -1,0 +1,33 @@
+{
+  "name": "catalogo-aldeia-viva",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "nuxt dev --port 3000 --host 0.0.0.0",
+    "build": "nuxt build",
+    "start": "node .output/server/index.mjs",
+    "preview": "nuxt preview",
+    "predb:seed": "node scripts/check-supabase-cli.mjs",
+    "predb:reset": "node scripts/check-supabase-cli.mjs",
+    "predb:push": "node scripts/check-supabase-cli.mjs",
+    "db:seed": "supabase db seed",
+    "db:reset": "supabase db reset",
+    "db:push": "supabase db push",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "docker:full": "docker compose --profile full up -d",
+    "docker:infra": "docker compose --profile infra up -d",
+    "docker:app": "docker compose --profile app up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "dependencies": {
+    "@nuxtjs/supabase": "^1.1.6",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "nuxt": "^3.12.0",
+    "zod": "^3.23.8"
+  }
+}

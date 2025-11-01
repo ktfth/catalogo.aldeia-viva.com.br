@@ -1,0 +1,13 @@
+node_modules
+.output
+.nuxt
+.env
+dist
+.vercel
+.cache
+pnpm-lock.yaml
+
+# Docker volumes
+.docker/
+*.log
+
