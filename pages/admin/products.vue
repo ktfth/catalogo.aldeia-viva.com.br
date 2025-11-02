@@ -24,9 +24,15 @@
           <label class="text-sm opacity-80">Descrição</label>
           <textarea v-model="form.description" rows="3" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2" />
         </div>
-        <div>
-          <label class="text-sm opacity-80">Imagem (URL)</label>
-          <input v-model="form.image_url" placeholder="https://..." class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2" />
+        <div class="md:col-span-2">
+          <ImageUpload
+            v-model="form.image_url"
+            bucket="product-images"
+            :folder="currentStore?.id"
+            label="Imagem do Produto"
+            help-text="Imagem do produto que será exibida no catálogo"
+            :allow-url-input="true"
+          />
         </div>
         <div>
           <label class="text-sm opacity-80">Estoque</label>

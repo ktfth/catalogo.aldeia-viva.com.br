@@ -5,6 +5,10 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxtjs/tailwindcss',
   ],
+  supabase: {
+    // Desabilitar redirecionamento automático para páginas públicas
+    redirect: false,
+  },
   runtimeConfig: {
     public: {
       whatsappNumber: process.env.PUBLIC_WHATSAPP_NUMBER || '',

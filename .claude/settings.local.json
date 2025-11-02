@@ -7,7 +7,12 @@
       "Bash(cat:*)",
       "Bash(chmod:*)",
       "Bash(psql:*)",
-      "Bash(supabase db exec:*)"
+      "Bash(supabase db exec:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(if [ -f .env ])",
+      "Bash(then echo \"File exists\")",
+      "Bash(else echo \"File does not exist\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

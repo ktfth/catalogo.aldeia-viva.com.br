@@ -51,16 +51,14 @@
       <div class="bg-ink-800 border border-white/10 rounded-xl p-6 space-y-4">
         <h2 class="text-lg font-semibold">Logo</h2>
 
-        <div class="space-y-1">
-          <label class="text-sm opacity-80">URL da Logo</label>
-          <input v-model="form.logo_url" type="url" placeholder="https://..." class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" />
-          <p class="text-xs opacity-60">URL de uma imagem para o logo da sua loja</p>
-        </div>
-
-        <div v-if="form.logo_url" class="flex items-center gap-4">
-          <img :src="form.logo_url" alt="Logo preview" class="w-24 h-24 object-contain bg-white/5 rounded" @error="logoError = true" />
-          <p v-if="logoError" class="text-sm text-red-300">Erro ao carregar imagem</p>
-        </div>
+        <ImageUpload
+          v-model="form.logo_url"
+          bucket="store-logos"
+          :folder="store?.id"
+          label="Logo da Loja"
+          help-text="Logo que aparecerá no topo do seu catálogo"
+          :allow-url-input="true"
+        />
       </div>
 
       <!-- Visibilidade -->
@@ -102,7 +100,6 @@ const form = reactive({
 
 const message = ref('')
 const isError = ref(false)
-const logoError = ref(false)
 const loading = ref(true)
 
 // Carregar dados da loja
@@ -140,11 +137,6 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
-
-// Watch logo URL para resetar erro
-watch(() => form.logo_url, () => {
-  logoError.value = false
 })
 
 async function save() {

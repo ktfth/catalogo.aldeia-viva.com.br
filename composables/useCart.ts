@@ -55,11 +55,11 @@ export function useCart() {
   async function checkout() {
     if (!canCheckout.value) return
     const lines = [
-      '*Novo pedido*%0A',
+      '*Novo pedido*\n',
       ...items.value.map(i => `• ${i.name} x${i.qty} — ${currency(i.price_cents * i.qty)}`),
-      `%0ATotal: *${currency(totalCents.value)}*`
+      `\nTotal: *${currency(totalCents.value)}*`
     ]
-    const msg = encodeURI(lines.join('%0A'))
+    const msg = encodeURIComponent(lines.join('\n'))
     const url = `https://wa.me/${state.whatsappNumber}?text=${msg}`
 
     // Optional: persist order + naive stock decrement (requires auth policies)
