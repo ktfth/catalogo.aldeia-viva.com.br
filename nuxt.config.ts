@@ -42,7 +42,7 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
   nitro: {
-    preset: 'node-server'
+    preset: 'vercel'
   },
   typescript: {
     strict: true
