@@ -35,10 +35,29 @@ async function submit() {
 
 async function register() {
   error.value = ''
-  const { error: err } = await client.auth.signUp({ email: email.value, password: password.value })
-  if (err) { error.value = err.message; return }
-  // Redirecionar novo usuário para página de boas-vindas
-  navigateTo('/welcome')
+  const { data, error: err } = await client.auth.signUp({
+    email: email.value,
+    password: password.value,
+    options: {
+      emailRedirectTo: undefined // Desabilitar verificação de email em produção
+    }
+  })
+  if (err) {
+    error.value = err.message
+    return
+  }
+
+  // Aguardar um pouco para o trigger criar a loja
+  await new Promise(resolve => setTimeout(resolve, 1000))
+
+  // Verificar se o usuário foi autenticado automaticamente
+  if (data.session) {
+    // Usuário logado com sucesso, redirecionar para welcome
+    navigateTo('/welcome')
+  } else {
+    // Se não houver sessão, pode ser que precise confirmar email
+    error.value = 'Por favor, verifique seu email para confirmar o cadastro.'
+  }
 }
 </script>
 

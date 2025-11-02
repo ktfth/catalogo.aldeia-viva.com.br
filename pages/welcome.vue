@@ -5,7 +5,7 @@
       <div class="w-16 h-16 bg-gold-400 rounded-full mx-auto flex items-center justify-center">
         <span class="text-3xl">🎉</span>
       </div>
-      <h1 class="text-3xl font-bold">Bem-vindo ao Catálogo Multi-Tenant!</h1>
+      <h1 class="text-3xl font-bold">Bem-vindo ao Catálogo Aldeia viva!</h1>
       <p class="text-lg opacity-80">Sua loja foi criada com sucesso. Vamos configurá-la?</p>
     </div>
 
@@ -33,7 +33,7 @@
         <div class="space-y-1">
           <label class="text-sm opacity-80">URL da sua loja *</label>
           <div class="flex items-center gap-2">
-            <span class="text-sm opacity-60 whitespace-nowrap">localhost:3000/</span>
+            <span class="text-sm opacity-60 whitespace-nowrap">{{ baseUrl }}/</span>
             <input
               v-model="form.slug"
               required
@@ -120,6 +120,14 @@ const form = reactive({
 
 const saving = ref(false)
 const error = ref('')
+
+// Calcular URL base dinamicamente
+const baseUrl = computed(() => {
+  if (process.client) {
+    return window.location.origin
+  }
+  return ''
+})
 
 onMounted(async () => {
   await loadCurrentUserStore()

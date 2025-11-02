@@ -1,6 +1,10 @@
 export default defineNuxtRouteMiddleware((to) => {
   const user = useSupabaseUser()
-  if (to.path.startsWith('/admin') && !user.value) {
+
+  // Páginas que requerem autenticação
+  const requiresAuth = to.path.startsWith('/admin') || to.path === '/welcome'
+
+  if (requiresAuth && !user.value) {
     return navigateTo('/login?next=' + encodeURIComponent(to.fullPath))
   }
 })
