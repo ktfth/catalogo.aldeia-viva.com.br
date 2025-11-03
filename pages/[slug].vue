@@ -1,27 +1,32 @@
 <template>
-  <section class="space-y-6">
+  <section class="space-y-4 sm:space-y-6">
     <!-- Cabeçalho da Loja -->
-    <div v-if="store" class="text-center space-y-4">
-      <img v-if="store.logo_url" :src="store.logo_url" alt="Logo" class="w-24 h-24 mx-auto object-contain" />
+    <div v-if="store" class="text-center space-y-3 sm:space-y-4">
+      <img v-if="store.logo_url" :src="store.logo_url" alt="Logo" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto object-contain" />
       <div>
-        <h1 class="text-3xl font-bold">{{ store.name }}</h1>
-        <p v-if="store.description" class="text-lg opacity-80 mt-2">{{ store.description }}</p>
+        <h1 class="text-2xl sm:text-3xl font-bold">{{ store.name }}</h1>
+        <p v-if="store.description" class="text-base sm:text-lg opacity-80 mt-1 sm:mt-2 px-4">{{ store.description }}</p>
       </div>
     </div>
 
     <!-- Busca e Filtros -->
-    <div class="flex items-center justify-between gap-4">
-      <h2 class="text-xl font-semibold">Produtos</h2>
-      <input v-model="q" type="search" placeholder="Buscar produtos" class="bg-ink-800 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400 w-64" />
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+      <h2 class="text-lg sm:text-xl font-semibold">Produtos</h2>
+      <input
+        v-model="q"
+        type="search"
+        placeholder="Buscar produtos"
+        class="bg-ink-800 border border-white/10 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:border-gold-400 w-full sm:w-64"
+      />
     </div>
 
     <!-- Lista de Produtos -->
-    <div v-if="pending" class="opacity-70">Carregando...</div>
+    <div v-if="pending" class="opacity-70 text-center py-12">Carregando...</div>
     <div v-else-if="filtered.length === 0" class="text-center opacity-60 py-12">
       Nenhum produto encontrado
     </div>
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <ProductCard v-for="p in filtered" :key="p.id" :product="p" @add="addToCart" />
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <ProductCard v-for="p in filtered" :key="p.id" :product="p" :store-logo="store?.logo_url" @add="addToCart" />
     </div>
   </section>
 </template>

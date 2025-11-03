@@ -1,6 +1,6 @@
 <template>
-  <section class="space-y-6">
-    <h1 class="text-2xl font-semibold">Configurações da Loja</h1>
+  <section class="space-y-4 sm:space-y-6">
+    <h1 class="text-xl sm:text-2xl font-semibold">Configurações da Loja</h1>
 
     <div v-if="loading || isLoading" class="opacity-70 text-center py-12">Carregando...</div>
     <div v-else-if="loadError || (isError && !store)" class="text-red-300 text-center py-12">
@@ -10,46 +10,46 @@
       </button>
     </div>
 
-    <form v-else-if="store" class="max-w-2xl space-y-6" @submit.prevent="save">
+    <form v-else-if="store" class="max-w-2xl space-y-4 sm:space-y-6" @submit.prevent="save">
       <!-- Informações Básicas -->
-      <div class="bg-ink-800 border border-white/10 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold">Informações Básicas</h2>
+      <div class="bg-ink-800 border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <h2 class="text-base sm:text-lg font-semibold">Informações Básicas</h2>
 
         <div class="space-y-1">
           <label class="text-sm opacity-80">Nome da Loja *</label>
-          <input v-model="form.name" required class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" />
+          <input v-model="form.name" required class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:border-gold-400" />
           <p class="text-xs opacity-60">Nome que aparecerá no seu catálogo</p>
         </div>
 
         <div class="space-y-1">
           <label class="text-sm opacity-80">Slug (URL) *</label>
-          <div class="flex items-center gap-2">
-            <span class="text-sm opacity-60">catalogo.aldeia-viva.com.br/</span>
-            <input v-model="form.slug" required pattern="[a-z0-9-]+" class="flex-1 bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" />
+          <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <span class="text-xs sm:text-sm opacity-60 whitespace-nowrap">{{ baseUrl }}/</span>
+            <input v-model="form.slug" required pattern="[a-z0-9-]+" class="flex-1 bg-ink-700 border border-white/10 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:border-gold-400" />
           </div>
           <p class="text-xs opacity-60">Apenas letras minúsculas, números e hífens</p>
         </div>
 
         <div class="space-y-1">
           <label class="text-sm opacity-80">Descrição</label>
-          <textarea v-model="form.description" rows="3" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" placeholder="Descreva sua loja em poucas palavras..." />
+          <textarea v-model="form.description" rows="3" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:border-gold-400" placeholder="Descreva sua loja em poucas palavras..." />
         </div>
       </div>
 
       <!-- WhatsApp -->
-      <div class="bg-ink-800 border border-white/10 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold">WhatsApp</h2>
+      <div class="bg-ink-800 border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <h2 class="text-base sm:text-lg font-semibold">WhatsApp</h2>
 
         <div class="space-y-1">
           <label class="text-sm opacity-80">Número do WhatsApp *</label>
-          <input v-model="form.whatsapp_number" required pattern="\d{10,15}" placeholder="5511999999999" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" />
+          <input v-model="form.whatsapp_number" required pattern="\d{10,15}" placeholder="5511999999999" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:border-gold-400" />
           <p class="text-xs opacity-60">Formato: DDI + DDD + Número (apenas números). Ex: 5511999999999</p>
         </div>
       </div>
 
       <!-- Logo -->
-      <div class="bg-ink-800 border border-white/10 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold">Logo</h2>
+      <div class="bg-ink-800 border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <h2 class="text-base sm:text-lg font-semibold">Logo</h2>
 
         <ImageUpload
           v-model="form.logo_url"
@@ -62,8 +62,8 @@
       </div>
 
       <!-- Visibilidade -->
-      <div class="bg-ink-800 border border-white/10 rounded-xl p-6 space-y-4">
-        <h2 class="text-lg font-semibold">Visibilidade</h2>
+      <div class="bg-ink-800 border border-white/10 rounded-lg sm:rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <h2 class="text-base sm:text-lg font-semibold">Visibilidade</h2>
 
         <label class="flex items-center gap-2 text-sm">
           <input type="checkbox" v-model="form.published" class="accent-gold-400" />
@@ -72,8 +72,8 @@
       </div>
 
       <!-- Ações -->
-      <div class="flex items-center gap-4">
-        <button type="submit" class="px-4 py-2 rounded-md bg-gold-400 text-black font-semibold hover:bg-gold-300">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+        <button type="submit" class="w-full sm:w-auto px-4 py-2 rounded-md bg-gold-400 text-black font-semibold hover:bg-gold-300">
           Salvar Alterações
         </button>
         <span v-if="message" class="text-sm" :class="isError ? 'text-red-300' : 'text-green-300'">{{ message }}</span>
@@ -88,6 +88,14 @@ definePageMeta({ middleware: 'auth' })
 const { currentStore, isLoading, loadError, loadCurrentUserStore, updateStore } = useStore()
 
 const store = computed(() => currentStore.value)
+
+// Obter a baseUrl dinamicamente
+const baseUrl = computed(() => {
+  if (process.client) {
+    return window.location.origin
+  }
+  return 'catalogo.aldeia-viva.com.br'
+})
 
 const form = reactive({
   name: '',

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-ink-900 text-white">
     <AppHeader />
-    <main class="max-w-6xl mx-auto px-4 py-8">
+    <main class="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
       <NuxtPage />
     </main>
   </div>
