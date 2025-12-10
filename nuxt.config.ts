@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       whatsappNumber: process.env.PUBLIC_WHATSAPP_NUMBER || '',
-      hcaptchaSiteKey: process.env.NUXT_PUBLIC_HCAPTCHA_SITE_KEY || '',
+      hcaptchaSiteKey: '', // Automaticamente pega de NUXT_PUBLIC_HCAPTCHA_SITE_KEY
     },
   },
   app: {

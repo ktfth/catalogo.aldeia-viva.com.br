@@ -52,8 +52,12 @@ let hcaptchaWidgetId: string | null = null
 
 // Renderizar o widget do hCaptcha quando o componente for montado
 onMounted(() => {
+  console.log('hCaptcha Site Key:', config.public.hcaptchaSiteKey ? 'Configurada' : 'NÃO configurada')
+  console.log('Valor da chave (primeiros 10 chars):', config.public.hcaptchaSiteKey?.substring(0, 10))
+
   if (!config.public.hcaptchaSiteKey) {
     console.warn('hCaptcha site key não configurada. Configure NUXT_PUBLIC_HCAPTCHA_SITE_KEY no arquivo .env')
+    error.value = 'Captcha não configurado. Entre em contato com o administrador.'
     return
   }
 
