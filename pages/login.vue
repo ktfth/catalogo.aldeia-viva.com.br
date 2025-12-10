@@ -10,7 +10,7 @@
         <label class="text-sm opacity-80">Senha</label>
         <input v-model="password" type="password" required minlength="6" class="w-full bg-ink-700 border border-white/10 rounded-md px-3 py-2 focus:outline-none focus:border-gold-400" />
       </div>
-      <div ref="hcaptchaContainer" class="h-captcha"></div>
+      <div v-if="shouldShowCaptcha" ref="hcaptchaContainer" class="h-captcha"></div>
       <div class="flex gap-2">
         <button class="px-3 py-2 rounded-md bg-gold-400 text-black font-semibold" :disabled="loading">
           {{ loading ? 'Aguarde...' : 'Entrar' }}
@@ -33,6 +33,7 @@ const password = ref('')
 const error = ref('')
 const loading = ref(false)
 const hcaptchaContainer = ref<HTMLElement | null>(null)
+const shouldShowCaptcha = ref(false)
 
 // Interface para o hCaptcha
 interface HCaptcha {
@@ -53,31 +54,51 @@ let hcaptchaWidgetId: string | null = null
 // Renderizar o widget do hCaptcha quando o componente for montado
 onMounted(() => {
   console.log('hCaptcha Site Key:', config.public.hcaptchaSiteKey ? 'Configurada' : 'NÃO configurada')
-  console.log('Valor da chave (primeiros 10 chars):', config.public.hcaptchaSiteKey?.substring(0, 10))
 
   if (!config.public.hcaptchaSiteKey) {
-    console.warn('hCaptcha site key não configurada. Configure NUXT_PUBLIC_HCAPTCHA_SITE_KEY no arquivo .env')
-    error.value = 'Captcha não configurado. Entre em contato com o administrador.'
+    console.warn('hCaptcha não configurado. Autenticação funcionará sem captcha.')
+    console.warn('Para habilitar, configure NUXT_PUBLIC_HCAPTCHA_SITE_KEY no arquivo .env')
+    shouldShowCaptcha.value = false
     return
   }
 
+  console.log('Valor da chave (primeiros 10 chars):', config.public.hcaptchaSiteKey.substring(0, 10))
+  shouldShowCaptcha.value = true
+
   // Esperar o script do hCaptcha carregar
+  let attempts = 0
+  const maxAttempts = 100 // 10 segundos
+
   const interval = setInterval(() => {
+    attempts++
+
+    if (attempts >= maxAttempts) {
+      clearInterval(interval)
+      console.error('hCaptcha não carregou após 10 segundos')
+      shouldShowCaptcha.value = false
+      return
+    }
+
     if (window.hcaptcha && hcaptchaContainer.value) {
       clearInterval(interval)
       try {
         hcaptchaWidgetId = window.hcaptcha.render(hcaptchaContainer.value, {
           sitekey: config.public.hcaptchaSiteKey,
           theme: 'dark',
+          'error-callback': (err: any) => {
+            console.error('hCaptcha error callback:', err)
+            shouldShowCaptcha.value = false
+            error.value = 'Erro ao carregar captcha. Tente novamente mais tarde.'
+          }
         })
+        console.log('hCaptcha renderizado com sucesso. Widget ID:', hcaptchaWidgetId)
       } catch (e) {
         console.error('Erro ao renderizar hCaptcha:', e)
+        shouldShowCaptcha.value = false
+        error.value = 'Erro ao carregar captcha. Verifique se o domínio está autorizado no hCaptcha.'
       }
     }
   }, 100)
-
-  // Limpar o intervalo após 10 segundos se não carregar
-  setTimeout(() => clearInterval(interval), 10000)
 })
 
 // Função para obter o token do hCaptcha

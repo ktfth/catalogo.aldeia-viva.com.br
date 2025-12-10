@@ -99,6 +99,8 @@ async function loadProducts() {
   if (!currentStore.value) return
 
   loadingProducts.value = true
+  console.log('[loadProducts] Carregando produtos para loja:', currentStore.value.id)
+
   const { data, error } = await client
     .from('products')
     .select('*')
@@ -106,9 +108,11 @@ async function loadProducts() {
     .order('created_at', { ascending: false })
 
   if (!error && data) {
+    console.log('[loadProducts] Produtos carregados:', data.length)
+    console.log('[loadProducts] Produtos:', data)
     products.value = data
   } else if (error) {
-    console.error('Erro ao carregar produtos:', error)
+    console.error('[loadProducts] Erro ao carregar produtos:', error)
   }
   loadingProducts.value = false
 }
@@ -122,7 +126,11 @@ const initLoading = ref(true)
 
 onMounted(async () => {
   try {
+    console.log('[products] Iniciando carregamento da página de produtos')
     const result = await loadCurrentUserStore()
+
+    console.log('[products] Resultado do loadCurrentUserStore:', result)
+    console.log('[products] currentStore.value:', currentStore.value)
 
     // Se a loja não foi encontrada, redirecionar para welcome
     if (result.error === 'STORE_NOT_FOUND') {
@@ -132,10 +140,13 @@ onMounted(async () => {
     }
 
     if (currentStore.value) {
+      console.log('[products] Loja carregada, ID:', currentStore.value.id, 'Nome:', currentStore.value.name)
       await loadProducts()
+    } else {
+      console.warn('[products] currentStore.value é null após loadCurrentUserStore')
     }
   } catch (error) {
-    console.error('Erro ao inicializar:', error)
+    console.error('[products] Erro ao inicializar:', error)
   } finally {
     initLoading.value = false
   }
@@ -157,8 +168,17 @@ async function save() {
     published: form.published,
     store_id: currentStore.value.id,
   }
-  const { error } = await client.from('products').insert(payload)
-  if (error) { err.value = error.message; return }
+
+  console.log('[save] Salvando produto:', payload)
+  const { data, error } = await client.from('products').insert(payload).select()
+
+  if (error) {
+    console.error('[save] Erro ao salvar produto:', error)
+    err.value = error.message
+    return
+  }
+
+  console.log('[save] Produto salvo com sucesso:', data)
   toggleForm.value = false
   Object.assign(form, { name: '', description: '', price: 0, image_url: '', stock: 0, published: true })
   await refresh()
