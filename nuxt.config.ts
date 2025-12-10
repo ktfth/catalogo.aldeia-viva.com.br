@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       whatsappNumber: process.env.PUBLIC_WHATSAPP_NUMBER || '',
+      hcaptchaSiteKey: process.env.NUXT_PUBLIC_HCAPTCHA_SITE_KEY || '',
     },
   },
   app: {
@@ -36,6 +37,9 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+      ],
+      script: [
+        { src: 'https://js.hcaptcha.com/1/api.js', async: true, defer: true }
       ]
     },
     pageTransition: { name: 'page', mode: 'out-in' },
