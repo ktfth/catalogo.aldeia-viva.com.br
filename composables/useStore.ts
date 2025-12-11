@@ -26,6 +26,20 @@ const Profile = z.object({
 
 export type Profile = z.infer<typeof Profile>
 
+// Função auxiliar para garantir que o número do WhatsApp tenha o código do Brasil (55)
+function normalizeWhatsAppNumber(number: string): string {
+  // Remove espaços e caracteres especiais
+  const cleanNumber = number.replace(/\D/g, '')
+
+  // Se já começa com 55, retorna como está
+  if (cleanNumber.startsWith('55')) {
+    return cleanNumber
+  }
+
+  // Caso contrário, adiciona 55 no início
+  return '55' + cleanNumber
+}
+
 export function useStore() {
   const client = useSupabaseClient<any>()
   const user = useSupabaseUser()
@@ -117,9 +131,15 @@ export function useStore() {
   async function updateStore(data: Partial<Store>) {
     if (!currentStore.value) return { error: new Error('Nenhuma loja carregada') }
 
+    // Normalizar número do WhatsApp se presente
+    const updatedData = {
+      ...data,
+      ...(data.whatsapp_number && { whatsapp_number: normalizeWhatsAppNumber(data.whatsapp_number) })
+    }
+
     const { error } = await client
       .from('stores')
-      .update(data)
+      .update(updatedData)
       .eq('id', currentStore.value.id)
 
     if (!error) {
@@ -163,6 +183,9 @@ export function useStore() {
 
     console.log('[useStore] Tentando criar/atualizar loja para usuário:', user.value.id)
 
+    // Normalizar número do WhatsApp
+    const normalizedWhatsApp = normalizeWhatsAppNumber(storeData.whatsapp_number)
+
     // Primeiro, tentar usar a loja já carregada em currentStore
     if (currentStore.value && currentStore.value.owner_id === user.value.id) {
       console.log('[useStore] Usando loja já carregada (id:', currentStore.value.id, '), atualizando...')
@@ -171,7 +194,7 @@ export function useStore() {
         .update({
           name: storeData.name,
           slug: storeData.slug,
-          whatsapp_number: storeData.whatsapp_number,
+          whatsapp_number: normalizedWhatsApp,
           description: storeData.description || null,
         })
         .eq('id', currentStore.value.id)
@@ -205,7 +228,7 @@ export function useStore() {
         .update({
           name: storeData.name,
           slug: storeData.slug,
-          whatsapp_number: storeData.whatsapp_number,
+          whatsapp_number: normalizedWhatsApp,
           description: storeData.description || null,
         })
         .eq('id', existingStore.id)
@@ -226,7 +249,7 @@ export function useStore() {
         owner_id: user.value.id,
         name: storeData.name,
         slug: storeData.slug,
-        whatsapp_number: storeData.whatsapp_number,
+        whatsapp_number: normalizedWhatsApp,
         description: storeData.description || null,
         published: true,
       })
@@ -257,7 +280,7 @@ export function useStore() {
               .update({
                 name: storeData.name,
                 slug: storeData.slug,
-                whatsapp_number: storeData.whatsapp_number,
+                whatsapp_number: normalizedWhatsApp,
                 description: storeData.description || null,
               })
               .eq('id', justCreatedStore.id)

@@ -8,7 +8,7 @@
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-2">
-        <NuxtLink to="/" class="px-3 py-2 text-sm rounded-md hover:bg-white/5">Lojas</NuxtLink>
+        <NuxtLink to="/marketplace" class="px-3 py-2 text-sm rounded-md hover:bg-white/5">Lojas</NuxtLink>
         <template v-if="user">
           <NuxtLink to="/admin/store" class="px-3 py-2 text-sm rounded-md hover:bg-white/5">Minha Loja</NuxtLink>
           <NuxtLink to="/admin/products" class="px-3 py-2 text-sm rounded-md hover:bg-white/5">Produtos</NuxtLink>
@@ -50,7 +50,7 @@
       >
         <div class="max-w-6xl mx-auto px-3 py-3 space-y-1">
           <NuxtLink
-            to="/"
+            to="/marketplace"
             @click="mobileMenuOpen = false"
             class="block px-3 py-2 text-sm rounded-md hover:bg-white/5 transition"
           >
